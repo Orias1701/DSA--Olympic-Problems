@@ -3,22 +3,22 @@
 using namespace std;
 
 const int MAXN = 100001;
-const float EPS = 1e-6;
+const float EPS = 0.0001;
 
 bool equal(float x, float y) {
     return fabs(x - y) < EPS;
 }
 
-int gt(int n){
-    int res = 1;
-    for (int i = 2; i <= n; i++){
-        res*=i;
-    }
-    return res;
+vector <long long> GT(MAXN, -1);
+
+long long gt(int n){
+    if (n < 2) GT[n] = n;
+    else if (GT[n] == -1) GT[n] = gt(n-1)*n;
+    return GT[n];
 }
 
-int ckn(int k, int n){
-    int res = gt(n)/(gt(k)*gt(n-k));
+long long ckn(int k, int n){
+    long long res = gt(n)/(gt(k)*gt(n-k));
     return res;
 }
 
@@ -52,53 +52,35 @@ void task2(){
         cin >> a[i];
     }
     long long MaxA = 0;
-    int count = 1;
+    int cnt = 1;
     for (int i = 0; i < N; i++){
         if (a[i] > MaxA) {
             MaxA = a[i];
-            count = 1;
+            cnt = 1;
         }
-        else if (a[i] == MaxA) count++;
+        else if (a[i] == MaxA) cnt++;
     }
-    cout << count;
+    cout << cnt;
 }
 
 void task3(){
-    unsigned long long N;
-    unsigned long long Nprime[MAXN][2];
-    memset(Nprime, 0, sizeof(Nprime));
-
+    long long N;
     cin >> N;
+    int i = 2;
+    map<int, int> dem;
 
-    int count = 0;
-    if (N % 2 == 0){
-        count++;
-        Nprime[count][0] = 2;
-        while (N % 2 == 0) {
-            Nprime[count][1]++;
-            N /= 2;
+    for (int i = 2; i*i <= N; i++) {
+        while (N % i == 0){
+            dem[i]++;
+            N/=i;
         }
     }
 
-    for (long long i = 3; i * i <= N; i+=2){
-        if (N % i == 0){
-            count++;
-            Nprime[count][0] = i;
-            while (N % i == 0){
-                Nprime[count][1]++;
-                N /= i;
-            }
-        }
+    if (N>1) {
+        dem[N]++;
     }
 
-    if (N > 1) {
-        count++;
-        Nprime[count][0] = N;
-        Nprime[count][1] = 1;
-    }
-
-    cout << count << endl;
-    for (int i = 1; i <= count; i++) cout << Nprime[i][0] << " " << Nprime[i][1] << endl;
+    cout << dem.size();
 }
 
 void task4(){
@@ -113,17 +95,18 @@ void task4(){
     }
 
     sort(Prefix, Prefix + N + 1);
-    int count=0, countemp=1;
+    long long cnt=0;
+    int cntemp=1;
 
     for (int i = 1; i <= N; i++){
         if(Prefix[i] == Prefix[i-1]){
-            countemp++;
+            cntemp++;
         } else {
-            count+=ckn(2, countemp);
-            countemp=1;
+            cnt+=ckn(2, cntemp);
+            cntemp=1;
         }
     }
-    cout << count << endl;
+    cout << cnt << endl;
 }
 
 int main(){
