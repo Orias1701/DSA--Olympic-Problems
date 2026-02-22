@@ -5,10 +5,10 @@ using namespace std;
 
 #define MAX_N 1000000
 
-int n, k, m;
+long long n, k, m;
 long long G[MAX_N];
 
-long long modPow(int a, int e, int m){
+long long modPow(long long a, long long e, long long m){
     if(e == -1) e = m - 2;
     long long r = 1;
     a = a % m;
@@ -20,31 +20,29 @@ long long modPow(int a, int e, int m){
     return r;
 }
 
-void gtCreate(int n){
-    G[0] = 0;
-    G[1] = 1;
-    for(int i = 2; i <= n; i++){
-        G[i] = G[i-1] * i;
+void gtCreate(long long n, long long m){
+    G[0] = 1;
+    for(long long i = 1; i <= n; i++){
+        G[i] = (G[i-1] * i) % m;
     }
 }
 
-long long gt(int n){
+long long gt(long long n){
     return G[n];
 }
 
-long long CMod(int k, int n, int m){
-    int gtn =  modPow(gt(n), 1, m);
-    int gtk =  modPow(gt(k), -1, m);
-    int gtnk = modPow(gt(n-k), -1, m);
-    cout << gtn << " " << gtk << " " << gtnk << " \n";
-    return gtn*gtk*gtnk;
+long long CMod(long long k, long long n, long long m){
+    long long gtn  = gt(n);
+    long long gtk  = modPow(gt(k), -1, m);
+    long long gtnk = modPow(gt(n-k), -1, m);
+    return ((gtn * gtk) % m * gtnk) % m;
 }
-
 
 int main(){
     cin >> n >> k;
-    cin >> m;
-    gtCreate(n);
+    // cin >> m;
+    m = 1000000007;
+    gtCreate(n, m);
     cout << CMod(k, n, m);
     return 0;
 }
