@@ -7,11 +7,14 @@ void sos_xor(vector<long long> &f, int nbits) {
     for (int i = 0; i < nbits; i++) {           // nbits <= 32
         for (int mask = 0; mask < N; mask++) {  // mask < N
             if (mask & (1 << i)) {
-                // cout << (mask ^ (1 << i)) << " ";
+                cout << "\nf[mask]: " << f[mask] << " xor " << f[mask ^ (1 << i)];
+
                 f[mask] ^= f[mask ^ (1 << i)];
+
+                cout << " = " << f[mask] << " mask: " << mask;
             }
         }
-        // cout << endl;
+        cout << endl;
     }
 }
 
@@ -34,6 +37,14 @@ int main() {
     for (int i = 0; i < N; i++) f[i] = arr[i];
 
     sos_xor(f, nbits);
-    cout << f[N - 1];
+    cout << "\nResult: " << f[N - 1] << "\n\n";
     return 0;
 }
+
+//  i   1 << i
+//  0   000001 = 1
+//  1   000010 = 2
+//  2   000100 = 4
+//  3   001000 = 8
+//  4   010000 = 16
+//  5   100000 = 32
