@@ -1,3 +1,10 @@
+/*
+Input: n, k;
+Array A = {1, 2, ..., n};
+Array B = hoán vị của A sao cho B[i] = A[i] +- k;
+Output: Array B;
+*/
+
 #include <bits/stdc++.h>
 
 using namespace std;
